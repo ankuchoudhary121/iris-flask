@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>Iris demo</title></head>
+  <body>
+    <h2>Iris predictor (tiny)</h2>
+    <form id="frm">
+      <label>sepal_length: <input name="sepal_length" value="5.1"></label><br>
+      <label>sepal_width:  <input name="sepal_width"  value="3.5"></label><br>
+      <label>petal_length: <input name="petal_length" value="1.4"></label><br>
+      <label>petal_width:  <input name="petal_width"  value="0.2"></label><br>
+      <button type="submit">Predict</button>
+    </form>
+
+    <pre id="out"></pre>
+
+    <script>
+      document.getElementById('frm').onsubmit = async (e) => {
+        e.preventDefault();
+        const form = new FormData(e.target);
+        const data = Object.fromEntries(form.entries());
+        const res = await fetch('/predict', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        const j = await res.json();
+        document.getElementById('out').innerText = JSON.stringify(j, null, 2);
+      };
+    </script>
+  </body>
+</html>
